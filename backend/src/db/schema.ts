@@ -40,3 +40,47 @@ export const operatorTable = pgTable(
     check('password_min_length', sql`char_length(${table.password}) >= 8`),
   ],
 );
+
+export const unclassifiedMemoriesTable = pgTable('unclassifiedMemories', {
+  id: text()
+    .primaryKey()
+    .default(sql`gen_random_uuid()`)
+    .notNull(),
+  memory: text().notNull(),
+  status: memoryStatus().default('unclassified').notNull(),
+  created_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const classifiedMemoriesTable = pgTable('classifiedMemories', {
+  id: text().primaryKey().notNull(),
+  memory: text().notNull(),
+  status: memoryStatus().default('classified').notNull(),
+  created_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const restoredMemoriesTable = pgTable('restoredMemories', {
+  id: text().primaryKey().notNull(),
+  memory: text().notNull(),
+
+  operator_id: text()
+    .references(() => operatorTable.id)
+    .notNull(),
+
+  status: memoryStatus().default('restored').notNull(),
+  created_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp({ precision: 3, mode: 'string' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
