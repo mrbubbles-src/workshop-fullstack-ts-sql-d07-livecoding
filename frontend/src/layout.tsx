@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from './context/theme-provider';
+import { Toaster } from './components/ui/shadcn/sonner';
 
 const Layout = () => {
   return (
@@ -8,6 +9,7 @@ const Layout = () => {
         <main>
           <Outlet />
         </main>
+        <Toaster richColors position="top-center" />
       </ThemeProvider>
     </>
   );
