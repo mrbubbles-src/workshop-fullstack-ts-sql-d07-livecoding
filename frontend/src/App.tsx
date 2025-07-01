@@ -6,6 +6,7 @@ import Layout from './layout';
 import Home from './pages/home';
 import NotFound from './pages/not-found';
 import LoginPage from './pages/login-page';
+import MemoryLevelPage from './pages/memory-level-page';
 
 // Styling
 import '@fontsource/poppins/400-italic.css';
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: '/login', element: <LoginPage /> },
+      { path: '/memory-level', element: <MemoryLevelPage /> },
       { path: '*', element: <NotFound /> },
     ],
   },

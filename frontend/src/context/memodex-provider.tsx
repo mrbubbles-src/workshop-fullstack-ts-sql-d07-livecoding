@@ -18,6 +18,7 @@ export function MemodexProvider({ children }: MemodexProviderProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+  console.log('memodex isloggedin/isLoading', isLoggedIn, isLoading);
   useEffect(() => {
     const checkLoginStatus = async () => {
       setIsLoading(true);
