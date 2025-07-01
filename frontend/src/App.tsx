@@ -4,6 +4,8 @@ import Layout from './layout';
 
 // Pages
 import Home from './pages/home';
+import NotFound from './pages/not-found';
+import LoginPage from './pages/login-page';
 
 // Styling
 import '@fontsource/poppins/400-italic.css';
@@ -17,7 +19,11 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      { path: '/login', element: <LoginPage /> },
+      { path: '*', element: <NotFound /> },
+    ],
   },
 ]);
 

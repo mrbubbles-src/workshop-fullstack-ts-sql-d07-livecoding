@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/shadcn/button';
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -8,14 +9,13 @@ import {
 import { Input } from '@/components/ui/shadcn/input';
 import { useMemodex } from '@/hooks/use-memodex';
 import { useEffect } from 'react';
-import { Form, useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 
 interface Inputs {
   email: string;
   password: string;
 }
-
 const LoginForm = () => {
   const { setIsLoggedIn } = useMemodex();
 
@@ -43,14 +43,12 @@ const LoginForm = () => {
         credentials: 'include',
         body: JSON.stringify(data),
       });
-
       if (!res.ok) {
         toast.error(
-          'Login fehlgeschlagen. Bitte überprüfen Sie ihre Anmdeldeinformationen.',
+          'Login fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldeinformationen.',
         );
-        throw new Error('Login Failed');
+        throw new Error('Login failed');
       }
-
       toast.success('Login erfolgreich! Weiterleitung...');
 
       setTimeout(() => {
@@ -80,7 +78,7 @@ const LoginForm = () => {
         <FormField
           control={control}
           name="email"
-          render={(field) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg">Email</FormLabel>
               <FormControl>
@@ -92,11 +90,11 @@ const LoginForm = () => {
         <FormField
           control={control}
           name="password"
-          render={(field) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-lg">Passwort</FormLabel>
+              <FormLabel className="text-lg">Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Passwort" {...field} />
+                <Input type="password" placeholder="Password" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -105,7 +103,7 @@ const LoginForm = () => {
           type="submit"
           disabled={isSubmitting}
           className="flex h-[3rem] w-[9rem] items-center justify-center place-self-start text-lg font-semibold">
-          {isSubmitting ? 'Wird Eingelogged...' : 'Login'}
+          {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
       </form>
     </Form>
