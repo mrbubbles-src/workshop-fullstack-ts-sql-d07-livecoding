@@ -1,12 +1,12 @@
 // Router
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './layout';
+import Layout from '@/layout';
 
 // Pages
-import Home from './pages/home';
-import NotFound from './pages/not-found';
-import LoginPage from './pages/login-page';
-import MemoryLevelPage from './pages/memory-level-page';
+import Home from '@/pages/home';
+import LoginPage from '@/pages/login-page';
+import MemoryLevelPage from '@/pages/memory-level-page';
+import NotFound from '@/pages/not-found';
 
 // Styling
 import '@fontsource/poppins/400-italic.css';
@@ -27,6 +27,7 @@ const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
+  // { path: '/*', element: <NotFound /> },
 ]);
 
 function App() {

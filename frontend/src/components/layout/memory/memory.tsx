@@ -1,5 +1,3 @@
-import Loading from '@/components/ui/loading';
-import { Badge } from '@/components/ui/shadcn/badge';
 import { Button } from '@/components/ui/shadcn/button';
 import {
   Card,
@@ -7,9 +5,11 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/shadcn/card';
-import { useMemodex } from '@/hooks/use-memodex';
+import { Badge } from '@/components/ui/shadcn/badge';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { useMemodex } from '@/hooks/use-memodex';
+import Loading from '@/components/ui/loading';
 
 interface MemoryData {
   id: string;
@@ -23,7 +23,7 @@ const Memory = () => {
   const { operator, isLoading, setIsLoading } = useMemodex();
   const [memory, setMemory] = useState<MemoryData | null>(null);
   const [isChecking, setIsChecking] = useState<boolean>(false);
-  const hasFetched = useRef<boolean>(false);
+  const hasFetched = useRef(false);
 
   const fetchMemory = async () => {
     setIsLoading(true);
@@ -39,7 +39,7 @@ const Memory = () => {
       const data = await res.json();
       setMemory(data.memory);
     } catch (error) {
-      toast.error('Fehler beim abrufen der Erinnerung');
+      toast.error('Fehler beim Abrufen der Erinnerung');
       console.error('Error fetching memory data:', error);
       setIsLoading(false);
     } finally {
@@ -54,7 +54,6 @@ const Memory = () => {
     }
 
     setIsChecking(true);
-
     try {
       const res = await fetch(
         `${import.meta.env.VITE_HQ}/memories/check-status`,
@@ -67,7 +66,6 @@ const Memory = () => {
           body: JSON.stringify({ memoryId: memory?.id }),
         },
       );
-
       if (!res.ok) {
         toast.error(
           'Verifikation fehlgeschlagen. Bitte versuchen Sie es später erneut.',
@@ -98,7 +96,6 @@ const Memory = () => {
   }, []);
 
   if (isLoading) return <Loading />;
-
   return (
     <>
       {memory && (
@@ -114,7 +111,7 @@ const Memory = () => {
           <CardContent>
             <p className="text-lg font-semibold">{memory.memory}</p>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-wrap justify-center gap-4">
             <Button
               variant={'ghost'}
               className="text-base font-semibold"

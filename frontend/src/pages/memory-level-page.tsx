@@ -1,12 +1,12 @@
 import Loading from '@/components/ui/loading';
-import { Badge } from '@/components/ui/shadcn/badge';
 import {
   Card,
+  CardHeader,
   CardContent,
   CardFooter,
-  CardHeader,
 } from '@/components/ui/shadcn/card';
 import { useMemodex } from '@/hooks/use-memodex';
+import { Badge } from '@/components/ui/shadcn/badge';
 import { useEffect } from 'react';
 
 const MemoryLevelPage = () => {
@@ -15,6 +15,7 @@ const MemoryLevelPage = () => {
   useEffect(() => {
     const fetchOperatorData = async () => {
       setIsLoading(true);
+
       try {
         const res = await fetch(`${import.meta.env.VITE_HQ}/operator/data`, {
           method: 'POST',
@@ -26,7 +27,7 @@ const MemoryLevelPage = () => {
         }
         const data = await res.json();
         setOperator({
-          operator_name: data.operrator_name,
+          operator_name: data.operator_name,
           role: data.role,
           memory_level: data.memory_level,
         });
@@ -36,9 +37,11 @@ const MemoryLevelPage = () => {
         setIsLoading(false);
       }
     };
+
     fetchOperatorData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   if (isLoading) return <Loading />;
 
   return (

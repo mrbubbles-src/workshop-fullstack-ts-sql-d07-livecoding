@@ -1,5 +1,5 @@
 import type { Operator } from '@/context/memodex-provider';
-import { createContext, useContext } from 'react';
+import { useContext, createContext } from 'react';
 
 interface MemodexContextType {
   isLoggedIn: boolean;

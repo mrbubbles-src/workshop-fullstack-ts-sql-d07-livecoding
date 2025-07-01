@@ -8,17 +8,13 @@ const LoginPage = () => {
   const { isLoggedIn, isLoading } = useMemodex();
   const navigate = useNavigate();
 
-  console.log('isLoggedIn', isLoggedIn);
-  console.log('isLoading', isLoading);
   useEffect(() => {
     if (!isLoading && isLoggedIn) {
       navigate('/');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, isLoggedIn]);
+  }, [isLoading, isLoggedIn, navigate]);
 
   if (isLoading) return <Loading />;
-
   return (
     <>
       <LoginForm />

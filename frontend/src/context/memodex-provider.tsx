@@ -14,11 +14,10 @@ export interface Operator {
 }
 
 export function MemodexProvider({ children }: MemodexProviderProps) {
-  const [operator, setOperator] = useState<Operator | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [operator, setOperator] = useState<Operator | null>(null);
 
-  console.log('memodex isloggedin/isLoading', isLoggedIn, isLoading);
   useEffect(() => {
     const checkLoginStatus = async () => {
       setIsLoading(true);
@@ -43,14 +42,14 @@ export function MemodexProvider({ children }: MemodexProviderProps) {
           setOperator(null);
         }
       } catch (error) {
-        console.error('Error checking logn status:', error);
+        console.error('Error checking login status:', error);
       }
     };
+
     checkLoginStatus();
   }, [isLoggedIn]);
 
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     navigate('/memory-level');
     setTimeout(async () => {
@@ -71,7 +70,7 @@ export function MemodexProvider({ children }: MemodexProviderProps) {
       } catch (error) {
         console.error('Error during logout:', error);
         toast.error(
-          'Beim Logout ist ein Fehler aufgetreten. Bitte versuche es später erneut.',
+          'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
         );
         setIsLoading(false);
       }
@@ -81,12 +80,12 @@ export function MemodexProvider({ children }: MemodexProviderProps) {
   return (
     <MemodexProviderContext.Provider
       value={{
-        isLoading,
-        setIsLoading,
         isLoggedIn,
         setIsLoggedIn,
         operator,
         setOperator,
+        isLoading,
+        setIsLoading,
         handleLogout,
       }}>
       {children}
