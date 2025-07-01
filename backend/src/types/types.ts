@@ -14,11 +14,13 @@ export interface Operator {
   created_at: string;
   updated_at: string;
 }
-
 export type JWTPayload = Pick<
   Operator,
   'id' | 'operator_name' | 'role' | 'memory_level'
-> & { iat?: number; exp?: number };
+> & {
+  iat?: number;
+  exp?: number;
+};
 
 export type MemoryStatus =
   | 'unclassified'
@@ -33,7 +35,9 @@ export interface UnclassifiedMemory {
   created_at: string;
   updated_at: string;
 }
-
+export interface ClassifiedMemory extends UnclassifiedMemory {
+  operator_id: string;
+}
 export interface RestoredMemory extends UnclassifiedMemory {
   operator_id: string;
 }

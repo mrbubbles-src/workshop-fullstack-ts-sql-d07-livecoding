@@ -1,7 +1,7 @@
-import { eq } from 'drizzle-orm';
 import { NextFunction, Request, Response } from 'express';
+import { operatorsTable } from '../db/schema.js';
 import { db } from '../db/index.js';
-import { operatorTable } from '../db/schema.js';
+import { eq } from 'drizzle-orm';
 import { comparePassword, createJWT, verifyJWT } from '../lib/auth/auth.js';
 import { GlobalError, JWTPayload } from '../types/types.js';
 
@@ -10,7 +10,10 @@ export const getOperatorData = async (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log('cookies', req.cookies);
   const { token } = req.cookies;
+  console.log('Validating operator token:', token);
+
   if (!token) {
     const error: GlobalError = new Error('Missing token in cookies');
     error.statusCode = 400;
@@ -29,13 +32,13 @@ export const getOperatorData = async (
   try {
     const operator = await db
       .select({
-        id: operatorTable.id,
-        operator_name: operatorTable.operator_name,
-        role: operatorTable.role,
-        memory_level: operatorTable.memory_level,
+        id: operatorsTable.id,
+        operator_name: operatorsTable.operator_name,
+        role: operatorsTable.role,
+        memory_level: operatorsTable.memory_level,
       })
-      .from(operatorTable)
-      .where(eq(operatorTable.id, verifiedToken.id))
+      .from(operatorsTable)
+      .where(eq(operatorsTable.id, verifiedToken.id))
       .limit(1);
 
     if (operator.length === 0) {
@@ -45,6 +48,7 @@ export const getOperatorData = async (
       error.statusCode = 400;
       return next(error);
     }
+    console.log('Operator found:', { ...operator[0] });
     res.status(200).json({
       ok: true,
       message: 'Operator is valid. They may proceed.',
@@ -54,7 +58,6 @@ export const getOperatorData = async (
     return next(error);
   }
 };
-
 export const verifyOperator = async (
   req: Request,
   res: Response,
@@ -62,37 +65,33 @@ export const verifyOperator = async (
 ) => {
   try {
     const { email, password } = req.body;
-    console.log('email', email);
-    console.log('password', password);
+    console.log('Verifying operator with email:', email);
+    console.log('Verifying operator with password:', password);
 
     const operator = await db
       .select({
-        id: operatorTable.id,
-        operator_name: operatorTable.operator_name,
-        role: operatorTable.role,
-        memory_level: operatorTable.memory_level,
-        password: operatorTable.password,
+        id: operatorsTable.id,
+        operator_name: operatorsTable.operator_name,
+        role: operatorsTable.role,
+        memory_level: operatorsTable.memory_level,
+        password: operatorsTable.password,
       })
-      .from(operatorTable)
-      .where(eq(operatorTable.email, email))
+      .from(operatorsTable)
+      .where(eq(operatorsTable.email, email))
       .limit(1);
-
-    console.log('operator', operator);
-
+    console.log('Operator found array:', operator);
     if (operator.length === 0) {
       const error: GlobalError = new Error('Invalid email or password');
       error.statusCode = 401;
       return next(error);
     }
-
-    const isPasswordVaild = await comparePassword(
+    console.log('Operator found:', operator[0]);
+    const isPasswordValid = await comparePassword(
       password,
       operator[0].password,
     );
-
-    console.log('isPasswordVaild', isPasswordVaild);
-
-    if (!isPasswordVaild) {
+    console.log('Is password valid:', isPasswordValid);
+    if (!isPasswordValid) {
       const error: GlobalError = new Error('Invalid email or password');
       error.statusCode = 401;
       return next(error);
@@ -100,13 +99,16 @@ export const verifyOperator = async (
 
     const { id, operator_name, role, memory_level } = operator[0];
 
-    const token = createJWT({
-      id,
-      operator_name,
-      role,
-      memory_level: Number(memory_level),
-    } as JWTPayload);
-
+    const token = createJWT(
+      {
+        id,
+        operator_name,
+        role,
+        memory_level: Number(memory_level),
+      } as JWTPayload,
+      '5h',
+    );
+    console.log('Generated token:', token);
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
@@ -115,7 +117,9 @@ export const verifyOperator = async (
     });
 
     res.status(200).json({ message: 'Login successful' });
-  } catch (error) {}
+  } catch (error) {
+    return next(error);
+  }
 };
 
 export const logoutOperator = async (
@@ -129,6 +133,7 @@ export const logoutOperator = async (
       secure: true,
       sameSite: 'none',
     });
+    res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
     return next(error);
   }

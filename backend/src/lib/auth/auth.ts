@@ -1,6 +1,6 @@
+import { JWTPayload } from '../../types/types.js';
 import bcrypt from 'bcrypt';
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
-import { JWTPayload } from '../../types/types.js';
 
 export const hashPassword = async (
   password: string,
@@ -20,7 +20,7 @@ export const createJWT = (
   payload: JWTPayload,
   expiresIn: SignOptions['expiresIn'] = '7d',
 ): string => {
-  const secret: Secret = process.env.JWT_Secret!;
+  const secret: Secret = process.env.JWT_SECRET!;
 
   if (!secret) {
     throw new Error('JWT secret is not defined');
@@ -29,13 +29,16 @@ export const createJWT = (
   const options: SignOptions = {
     expiresIn: expiresIn as SignOptions['expiresIn'],
   };
+
   return jwt.sign(payload, secret, options);
 };
 
 export const verifyJWT = (token: string): JWTPayload => {
-  const secret: Secret = process.env.JWT_Secret!;
+  const secret: Secret = process.env.JWT_SECRET!;
+
   if (!secret) {
     throw new Error('JWT secret is not defined');
   }
+
   return jwt.verify(token, secret) as JWTPayload;
 };

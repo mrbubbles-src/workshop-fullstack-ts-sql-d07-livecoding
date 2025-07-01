@@ -22,13 +22,11 @@ app.use(
   }),
 );
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
-//routes
 app.use('/operator', operatorRouter);
 app.use('/memories', memoriesRouter);
 
-// errorhandler
 app.use(errorHandler);
 
 app.listen(PORT, () => {

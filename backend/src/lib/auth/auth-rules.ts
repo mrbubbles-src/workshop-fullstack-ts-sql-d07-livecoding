@@ -3,15 +3,15 @@ import { ValidationChain } from 'express-validator/lib/chain/validation-chain.js
 
 export const operatorValidationRules: { [key: string]: ValidationChain[] } = {
   register: [
-    check('operator_name')
+    check('username')
       .trim()
       .escape()
       .notEmpty()
-      .withMessage('Operatorname is required')
+      .withMessage('Username is required')
       .isLength({ min: 3, max: 30 })
-      .withMessage('Operatorname must be between 3 and 30 characters long')
+      .withMessage('Username must be between 3 and 30 characters long')
       .isAlphanumeric()
-      .withMessage('Operatorname must contain only letters and numbers'),
+      .withMessage('Username must contain only letters and numbers'),
 
     check('email')
       .trim()

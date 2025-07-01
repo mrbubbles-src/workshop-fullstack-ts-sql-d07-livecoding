@@ -1,12 +1,12 @@
-import { eq, sql } from 'drizzle-orm';
 import { db } from '../db/index.js';
 import {
   classifiedMemoriesTable,
-  operatorTable,
+  operatorsTable,
   restoredMemoriesTable,
   unclassifiedMemoriesTable,
 } from '../db/schema.js';
 import { MemoryStatus, UnclassifiedMemory } from '../types/types.js';
+import { eq, sql } from 'drizzle-orm';
 
 export const restoreMemory = async (
   memory: UnclassifiedMemory,
@@ -23,8 +23,9 @@ export const restoreMemory = async (
     await db.insert(restoredMemoriesTable).values(restoredMemory);
 
     await db
-      .update(operatorTable)
-      .set({ memory_level: sql`${operatorTable.memory_level} + 0.01` });
+      .update(operatorsTable)
+      .set({ memory_level: sql`${operatorsTable.memory_level} + 0.01` })
+      .where(eq(operatorsTable.id, operatorId));
 
     await db
       .delete(unclassifiedMemoriesTable)
@@ -53,6 +54,7 @@ export const classifyMemory = async (memory: UnclassifiedMemory) => {
             return char;
           })
           .join('');
+
         return classifiedWord;
       }
       return word;

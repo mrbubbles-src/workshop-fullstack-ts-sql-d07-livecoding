@@ -1,11 +1,11 @@
 import { sql } from 'drizzle-orm';
 import {
-  check,
   numeric,
   pgEnum,
   pgTable,
-  text,
   timestamp,
+  text,
+  check,
 } from 'drizzle-orm/pg-core';
 
 export const operatorRole = pgEnum('role', ['admin', 'operator']);
@@ -17,7 +17,7 @@ export const memoryStatus = pgEnum('status', [
   'restored',
 ]);
 
-export const operatorTable = pgTable(
+export const operatorsTable = pgTable(
   'operators',
   {
     id: text()
@@ -71,11 +71,9 @@ export const classifiedMemoriesTable = pgTable('classifiedMemories', {
 export const restoredMemoriesTable = pgTable('restoredMemories', {
   id: text().primaryKey().notNull(),
   memory: text().notNull(),
-
   operator_id: text()
-    .references(() => operatorTable.id)
+    .references(() => operatorsTable.id)
     .notNull(),
-
   status: memoryStatus().default('restored').notNull(),
   created_at: timestamp({ precision: 3, mode: 'string' })
     .default(sql`CURRENT_TIMESTAMP`)

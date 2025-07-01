@@ -1,10 +1,10 @@
-import { eq } from 'drizzle-orm';
-import { NextFunction, Request, Response } from 'express';
 import { db } from '../db/index.js';
 import { unclassifiedMemoriesTable } from '../db/schema.js';
 import { verifyJWT } from '../lib/auth/auth.js';
 import { classifyMemory, restoreMemory } from '../lib/memories.js';
 import { UnclassifiedMemory } from '../types/types.js';
+import { eq } from 'drizzle-orm';
+import { NextFunction, Request, Response } from 'express';
 
 export const getUnclassifiedMemory = async (
   _req: Request,
@@ -33,6 +33,7 @@ export const getUnclassifiedMemory = async (
       .where(eq(unclassifiedMemoriesTable.id, randomMemory.id));
 
     res.status(200).json({ memory: randomMemory });
+    return;
   } catch (error) {
     return next(error);
   }
@@ -85,7 +86,6 @@ export const checkMemoryStatus = async (
         const shouldRestore = Math.random() > 0.5;
 
         const memory: UnclassifiedMemory = memoryToClassify[0];
-
         if (shouldRestore) {
           await restoreMemory(memory, operatorId);
           res.status(200).json({
@@ -97,11 +97,12 @@ export const checkMemoryStatus = async (
         res.status(200).json({
           message: 'Memory classified successfully.',
         });
-        res.status(200).json({ message: 'Try again.' });
+        return;
       } catch (error) {
         return next(error);
       }
     }
+    res.status(200).json({ message: 'Try again.' });
   } catch (error) {
     return next(error);
   }
