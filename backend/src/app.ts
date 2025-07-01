@@ -24,9 +24,9 @@ app.use(
 
 const PORT = process.env.PORT || 3001;
 
-app.get('/', (_req: Request, res: Response, _next: NextFunction) =>
-  res.send('Hallo'),
-);
+app.get('/', (_: Request, res: Response) => {
+  res.send('Hello, World!');
+});
 
 app.use('/operator', operatorRouter);
 app.use('/memories', memoriesRouter);
