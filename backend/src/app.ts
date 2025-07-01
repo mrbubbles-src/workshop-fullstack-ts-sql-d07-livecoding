@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
@@ -23,6 +23,10 @@ app.use(
 );
 
 const PORT = process.env.PORT || 3001;
+
+app.get('/', (_req: Request, res: Response, _next: NextFunction) =>
+  res.send('Hallo'),
+);
 
 app.use('/operator', operatorRouter);
 app.use('/memories', memoriesRouter);
