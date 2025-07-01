@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
-import { JWTPayload } from 'src/types/types.js';
+import { JWTPayload } from '../../types/types.js';
 
 export const hashPassword = async (
   password: string,

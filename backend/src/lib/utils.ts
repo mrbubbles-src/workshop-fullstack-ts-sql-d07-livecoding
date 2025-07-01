@@ -1,7 +1,7 @@
 import { eq, or } from 'drizzle-orm';
-import { db } from 'src/db/index.js';
-import { operatorTable, unclassifiedMemoriesTable } from 'src/db/schema.js';
-import { GlobalError, operatorRole } from 'src/types/types.js';
+import { db } from '../db/index.js';
+import { operatorTable, unclassifiedMemoriesTable } from '../db/schema.js';
+import { GlobalError, operatorRole } from '../types/types.js';
 import { hashPassword } from './auth/auth.js';
 
 export interface RegisterUserDataProps {

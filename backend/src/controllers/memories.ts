@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { NextFunction, Request, Response } from 'express';
-import { db } from 'src/db/index.js';
-import { unclassifiedMemoriesTable } from 'src/db/schema.js';
-import { verifyJWT } from 'src/lib/auth/auth.js';
-import { classifyMemory, restoreMemory } from 'src/lib/memories.js';
-import { UnclassifiedMemory } from 'src/types/types.js';
+import { db } from '../db/index.js';
+import { unclassifiedMemoriesTable } from '../db/schema.js';
+import { verifyJWT } from '../lib/auth/auth.js';
+import { classifyMemory, restoreMemory } from '../lib/memories.js';
+import { UnclassifiedMemory } from '../types/types.js';
 
 export const getUnclassifiedMemory = async (
   _req: Request,

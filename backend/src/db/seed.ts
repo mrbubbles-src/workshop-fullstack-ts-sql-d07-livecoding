@@ -2,10 +2,10 @@ import {
   createMemories,
   registerUser,
   RegisterUserDataProps,
-} from 'src/lib/utils.js';
+} from '../lib/utils.js';
 import { db } from './index.js';
 import { operatorTable, unclassifiedMemoriesTable } from './schema.js';
-import { memories } from 'src/data/memories.js';
+import { memories } from '../data/memories.js';
 
 const seedMemoriesDatabase = async () => {
   try {

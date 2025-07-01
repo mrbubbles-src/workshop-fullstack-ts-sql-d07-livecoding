@@ -1,12 +1,12 @@
 import { eq, sql } from 'drizzle-orm';
-import { db } from 'src/db/index.js';
+import { db } from '../db/index.js';
 import {
   classifiedMemoriesTable,
   operatorTable,
   restoredMemoriesTable,
   unclassifiedMemoriesTable,
-} from 'src/db/schema.js';
-import { MemoryStatus, UnclassifiedMemory } from 'src/types/types.js';
+} from '../db/schema.js';
+import { MemoryStatus, UnclassifiedMemory } from '../types/types.js';
 
 export const restoreMemory = async (
   memory: UnclassifiedMemory,

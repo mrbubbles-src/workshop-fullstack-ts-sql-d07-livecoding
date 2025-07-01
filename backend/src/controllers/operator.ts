@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
 import { NextFunction, Request, Response } from 'express';
-import { db } from 'src/db/index.js';
-import { operatorTable } from 'src/db/schema.js';
-import { comparePassword, createJWT, verifyJWT } from 'src/lib/auth/auth.js';
-import { GlobalError, JWTPayload } from 'src/types/types.js';
+import { db } from '../db/index.js';
+import { operatorTable } from '../db/schema.js';
+import { comparePassword, createJWT, verifyJWT } from '../lib/auth/auth.js';
+import { GlobalError, JWTPayload } from '../types/types.js';
 
 export const getOperatorData = async (
   req: Request,
@@ -62,6 +62,8 @@ export const verifyOperator = async (
 ) => {
   try {
     const { email, password } = req.body;
+    console.log('email', email);
+    console.log('password', password);
 
     const operator = await db
       .select({
@@ -75,6 +77,8 @@ export const verifyOperator = async (
       .where(eq(operatorTable.email, email))
       .limit(1);
 
+    console.log('operator', operator);
+
     if (operator.length === 0) {
       const error: GlobalError = new Error('Invalid email or password');
       error.statusCode = 401;
@@ -85,6 +89,8 @@ export const verifyOperator = async (
       password,
       operator[0].password,
     );
+
+    console.log('isPasswordVaild', isPasswordVaild);
 
     if (!isPasswordVaild) {
       const error: GlobalError = new Error('Invalid email or password');
